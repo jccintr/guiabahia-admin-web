@@ -13,7 +13,7 @@ const LinkItems = [
   { id: 1, name: 'Home', icon: FiHome, route: '/' },
   { id: 2, name: 'Categorias', icon: FaList, route: '/categorias' },
   { id: 3, name: 'Cidades', icon: FaCity, route: '/cidades' },
-  { id: 4, name: 'Distritos', icon: BiMap, route: '/distritos' },
+  
   { id: 5, name: 'Cadastros', icon: FaUserAlt, route: '/cadastros' },
   { id: 5, name: 'Parâmetros', icon: FiSettings, route: '/parametros' },
 ]

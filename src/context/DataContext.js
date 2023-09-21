@@ -7,6 +7,7 @@ const DataContext = createContext({});
 
 export const DataProvider = ({children}) => {
     const [logged,setLogged] = useState(true);
+    const [cidade,setCidade] = useState({nome:''});
    
   
 
@@ -40,7 +41,9 @@ useEffect(() => {
 
   return (
       <DataContext.Provider value={{
-        logged
+        logged,
+        cidade,
+        setCidade,
        
       }}>
         {children}
