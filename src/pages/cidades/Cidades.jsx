@@ -53,7 +53,7 @@ const Cidades = () => {
       cell: row => <><Button m="2" onClick={()=>onEdit(row)} bg={'green.400'} color={'white'} _hover={{bg: 'green.500',}} size='xs'>EDITAR</Button>
                      <Button m="2" onClick={()=>onDelete(row)} bg={'red.400'} color={'white'} _hover={{bg: 'red.500',}} size='xs'>EXCLUIR</Button>
                      <Button m="2" onClick={()=>onDistritosClick(row)} bg={'blue.400'} color={'white'} _hover={{bg: 'blue.500',}} size='xs'>DISTRITOS</Button>
-                     <Button m="2" onClick={()=>onContatosClick(row)} bg={'orange.400'} color={'white'} _hover={{bg: 'orange.500',}} size='xs'>CADASTROS</Button>
+                     <Button m="2" onClick={()=>onContatosClick(row)} bg={'orange.400'} color={'white'} _hover={{bg: 'orange.500',}} size='xs'>CONTATOS</Button>
                    </>,
     },
     

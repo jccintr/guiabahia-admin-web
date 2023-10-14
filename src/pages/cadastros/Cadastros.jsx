@@ -1,7 +1,7 @@
 import React, { useEffect,useState,useContext } from 'react';
-import { Flex,Box,useColorModeValue,Heading,Button,useDisclosure,InputGroup,InputLeftElement,useToast,Input,Text } from '@chakra-ui/react';
+import { Flex,Box,useColorModeValue,Heading,Button,useDisclosure,InputGroup,InputLeftElement,useToast,Input } from '@chakra-ui/react';
 import {database} from '../../firebaseConfig';
-import { addDoc,collection,onSnapshot, orderBy, query,doc,updateDoc,where,getDocs,deleteDoc } from 'firebase/firestore';
+import { addDoc,collection,onSnapshot, orderBy, query,doc,updateDoc,where,deleteDoc } from 'firebase/firestore';
 import DataTable from 'react-data-table-component';
 import ModalConfirm from '../../components/modals/ModalConfirm';
 import ModalCadastro from '../../components/modals/ModalCadastro';
@@ -51,6 +51,10 @@ const Cadastros = () => {
       selector: row => GetCategoryName(row.categoriaId),
     },
     {
+      name: 'WhatsApp',
+      selector: row => row.telefone,
+    },
+    {
       name: '',
       cell: row => <><Button m="2" onClick={()=>onEdit(row)} bg={'green.400'} color={'white'} _hover={{bg: 'green.500',}} size='xs'>EDITAR</Button>
                      <Button m="2" onClick={()=>onDelete(row)} bg={'red.400'} color={'white'} _hover={{bg: 'red.500',}} size='xs'>EXCLUIR</Button>
@@ -62,7 +66,7 @@ const Cadastros = () => {
 
 const contatosFiltrado = contatos.filter(
   contato => contato.nome && contato.nome.toLowerCase().includes(searchText.toLowerCase()),
-);
+).sort((a,b) => (a.nome > b.nome) ? 1 : ((b.nome > a.nome) ? -1 : 0));
 
 const onAdd = () => {
   
@@ -84,50 +88,45 @@ const onAdd = () => {
   
 }
 
-const onDelete = (distrito) => {
-  /*
-  setDistrito(distrito);
+const onDelete = (contato) => {
+  
+  setContato(contato);
   onOpenModalConfirm();
-  */
+ 
 }
 
 const onDeleteAction = async () => {
-  /* 
+   
   onCloseModalConfirm();
-  // verifica se o distrito possui cadsatros
-  const contatosRef = collection(database,'Contatos');
-  console.log(distrito);
-  const q = query(contatosRef, where("distritoId", "==", distrito.id));
-  const querySnapshot = await getDocs(q);
-  const contatosCount = querySnapshot.size;
-  alert(contatosCount);
-  if(contatosCount===0){
-   alert('entrou para deletar');
-   // const docRef = doc(database,'Distritos',distrito.id);
-   // deleteDoc(docRef);
-    
-  } else {
-       toast({title: 'Atenção !',description: "Esta distrito está sendo utilizado e não poderá ser excluido.",status: 'error',duration: 3000,isClosable: true,})
- 
- 
-  }
- */
+  const docRef = doc(database,'Contatos',contato.id);
+  deleteDoc(docRef);
+  
 }
 
 
 const onSalvar = async () => {
 
- 
-  
- if(contato.nome.trim().length===0){
-   toast({title: 'Atenção !',description: "Preencha todos os campos por favor.",status: 'error',duration: 3000,isClosable: true,})
-   return;
+  if(contato.nome.trim().length===0 || contato.telefone.trim().length===0){
+    toast({title: 'Atenção !',description: "Nome e WhatsApp são de preenchimento obrigatório.",status: 'error',duration: 3000,isClosable: true,})
+    return;
+  }
+
+ if (contato.categoriaId===0){
+  toast({title: 'Atenção !',description: "Selecione uma categoria por favor.",status: 'error',duration: 3000,isClosable: true,})
+  return;
  }
+
+ if (contato.distritoId===0){
+  toast({title: 'Atenção !',description: "Selecione um distrito por favor.",status: 'error',duration: 3000,isClosable: true,})
+  return;
+ }
+  
+ 
  if (!editando){ // adiciona contato
-    await addDoc(collection(database,'Contatos'),{nome: contato.nome,telefone: contato.telefone,instagram: contato.instagram, facebook: contato.facebook,website: contato.webSite, cidadeId: contato.cidadeId,distritoId: contato.distritoId,categoriaId: contato.categoriaId});
+    await addDoc(collection(database,'Contatos'),{nome: contato.nome,telefone: contato.telefone,instagram: contato.instagram, facebook: contato.facebook,website: contato.website, cidadeId: contato.cidadeId,distritoId: contato.distritoId,categoriaId: contato.categoriaId});
  } else {
   const docRef = doc(database,'Contatos',contato.id);
-  updateDoc(docRef,{nome: contato.nome,telefone: contato.telefone,instagram: contato.instagram,facebook:contato.facebook,website: 'www',categoriaId: contato.categoriaId,distritoId: contato.distritoId});
+  updateDoc(docRef,{nome: contato.nome,telefone: contato.telefone,instagram: contato.instagram,facebook:contato.facebook,website: contato.website,categoriaId: contato.categoriaId,distritoId: contato.distritoId});
   
 }
 
@@ -150,7 +149,8 @@ useEffect(()=>{
       instagram: doc.data().instagram ? doc.data().instagram:'',
       facebook: doc.data().facebook ? doc.data().facebook:'',
       website: doc.data().website ? doc.data().website:'',
-      categoriaId: doc.data().categoriaId
+      categoriaId: doc.data().categoriaId,
+      distritoId: doc.data().distritoId,
     } )))
   })
   
@@ -192,6 +192,16 @@ const GetCategoryName = (categoryId) => {
   }
   return categoryName;
 }
+
+// const GetDistrictName = (districtId) => {
+//   let districtName = '' 
+//   for (let i=0;i<distritos.length;i++){
+//     if(distritos[i].id===districtId){
+//       districtName = distritos[i].nome
+//     }
+//   }
+//   return districtName;
+// }
 
 return (
   <Flex w='full' marginLeft={60} minH={'100vh'} height='100vh' direction='column' align={'center'} justify={'flex-start'} bg={['white','gray.100']} p='8'>

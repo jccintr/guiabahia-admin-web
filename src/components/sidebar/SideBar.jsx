@@ -1,20 +1,18 @@
 'use client'
 
-import React, { useState } from 'react'
-import {IconButton, Box,CloseButton,Flex,Icon,useColorModeValue,Text,Drawer,DrawerContent,useDisclosure,BoxProps,FlexProps} from '@chakra-ui/react'
-import {FiHome,FiMenu,FiSettings} from 'react-icons/fi'
-import { FaCity, FaUserAlt, FaList } from 'react-icons/fa';
-import { BiMap } from 'react-icons/bi';
-import { IconType } from 'react-icons'
-import { ReactText } from 'react'
-import { useNavigate, Link } from 'react-router-dom';
+import React from 'react';
+import {IconButton, Box,CloseButton,Flex,Icon,useColorModeValue,Text,Drawer,DrawerContent,useDisclosure,} from '@chakra-ui/react';
+import {FiHome,FiMenu,FiSettings} from 'react-icons/fi';
+import { FaCity, FaList } from 'react-icons/fa';
+
+import { useNavigate } from 'react-router-dom';
 
 const LinkItems = [
   { id: 1, name: 'Home', icon: FiHome, route: '/' },
   { id: 2, name: 'Categorias', icon: FaList, route: '/categorias' },
   { id: 3, name: 'Cidades', icon: FaCity, route: '/cidades' },
   
-  { id: 5, name: 'Cadastros', icon: FaUserAlt, route: '/cadastros' },
+  //{ id: 5, name: 'Cadastros', icon: FaUserAlt, route: '/cadastros' },
   { id: 5, name: 'Parâmetros', icon: FiSettings, route: '/parametros' },
 ]
 
@@ -22,7 +20,7 @@ const LinkItems = [
 export default function SideBar() {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [selected,setSelected] = useState(1);
+  
 
 
   const onMenu = (route) => {

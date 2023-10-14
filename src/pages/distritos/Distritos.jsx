@@ -1,7 +1,7 @@
 import React, { useEffect,useState,useContext } from 'react';
-import { Flex,Box,useColorModeValue,Heading,Button,useDisclosure,InputGroup,InputLeftElement,useToast,Input,Text } from '@chakra-ui/react';
+import { Flex,Box,useColorModeValue,Heading,Button,useDisclosure,InputGroup,InputLeftElement,useToast,Input } from '@chakra-ui/react';
 import {database} from '../../firebaseConfig';
-import { addDoc,collection,onSnapshot, orderBy, query,doc,updateDoc,where,getDocs,deleteDoc } from 'firebase/firestore';
+import { addDoc,collection,onSnapshot, query,doc,updateDoc,where,getDocs,deleteDoc } from 'firebase/firestore';
 import DataTable from 'react-data-table-component';
 import ModalConfirm from '../../components/modals/ModalConfirm';
 import ModalDistrito from '../../components/modals/ModalDistrito';
@@ -98,11 +98,11 @@ const onDeleteAction = async () => {
    const q = query(contatosRef, where("distritoId", "==", distrito.id));
    const querySnapshot = await getDocs(q);
    const contatosCount = querySnapshot.size;
-   alert(contatosCount);
+   //alert(contatosCount);
    if(contatosCount===0){
-    alert('entrou para deletar');
-    // const docRef = doc(database,'Distritos',distrito.id);
-    // deleteDoc(docRef);
+    //alert('entrou para deletar');
+     const docRef = doc(database,'Distritos',distrito.id);
+     deleteDoc(docRef);
      
    } else {
         toast({title: 'Atenção !',description: "Esta distrito está sendo utilizado e não poderá ser excluido.",status: 'error',duration: 3000,isClosable: true,})
